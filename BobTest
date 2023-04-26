@@ -1,0 +1,57 @@
+use tempdb;
+go
+
+create table dbo.BobTableTest
+(
+PolicyNumber NVARCHAR(255)
+,GlLobCode NVARCHAR(255)
+,IncurredMonth DATE
+,UACCode NVARCHAR(255)
+,BrokerCode NVARCHAR(255)
+)
+
+INSERT INTO dbo.BobTableTest (PolicyNumber, GlLobCode, IncurredMonth, UACCode, BrokerCode)
+VALUES
+  (N'ABC123', N'Lob1', DATEADD(day, -ABS(CHECKSUM(NEWID())) % 365, GETDATE()), N'UAC1', N'Broker1'),
+  (N'DEF456', N'Lob2', DATEADD(day, -ABS(CHECKSUM(NEWID())) % 365, GETDATE()), N'UAC2', N'Broker2'),
+  (N'GHI789', N'Lob3', DATEADD(day, -ABS(CHECKSUM(NEWID())) % 365, GETDATE()), N'UAC3', N'Broker3'),
+  (N'JKL012', N'Lob4', DATEADD(day, -ABS(CHECKSUM(NEWID())) % 365, GETDATE()), N'UAC4', N'Broker4'),
+  (N'MNO345', N'Lob5', DATEADD(day, -ABS(CHECKSUM(NEWID())) % 365, GETDATE()), N'UAC5', N'Broker5'),
+  (N'PQR678', N'Lob6', DATEADD(day, -ABS(CHECKSUM(NEWID())) % 365, GETDATE()), N'UAC6', N'Broker6'),
+  (N'STU901', N'Lob7', DATEADD(day, -ABS(CHECKSUM(NEWID())) % 365, GETDATE()), N'UAC7', N'Broker7'),
+  (N'VWX234', N'Lob8', DATEADD(day, -ABS(CHECKSUM(NEWID())) % 365, GETDATE()), N'UAC8', N'Broker8'),
+  (N'YZA567', N'Lob9', DATEADD(day, -ABS(CHECKSUM(NEWID())) % 365, GETDATE()), N'UAC9', N'Broker9'),
+  (N'BCD890', N'Lob10', DATEADD(day, -ABS(CHECKSUM(NEWID())) % 365, GETDATE()), N'UAC10', N'Broker10');
+
+SELECT * from dbo.BobTableTest
+
+drop table if exists dbo.MasterTable
+
+CREATE TABLE dbo.MasterTable
+(
+PolicyNumber NVARCHAR(255)
+,GlobCode NVARCHAR(255)
+,IncurredMonth DATE
+,UACCode NVARCHAR(255)
+,BrokerCode NVARCHAR(255)
+)
+
+INSERT INTO dbo.MasterTable (PolicyNumber, GlobCode, IncurredMonth, UACCode, BrokerCode)
+VALUES
+  (N'ABC123', N'Lob1', '2023-04-05', N'UAC1', N'Broker1'),
+  (N'DEF456', N'Lob2', '2022-02-01', N'UAC2', N'Broker2'),
+  (N'GHI789', N'Lob3', '2022-03-01', N'UAC3', N'Broker3'),
+  (N'JKL012', N'Lob4', '2022-04-01', N'UAC4', N'Broker4'),
+  (N'MNO345', N'Lob5', '2022-05-01', N'UAC5', N'Broker5'),
+  (N'PQR678', N'Lob6', '2022-06-01', N'UAC6', N'Broker6'),
+  (N'STU901', N'Lob7', '2022-07-01', N'UAC7', N'Broker7'),
+  (N'VWX234', N'Lob8', '2022-08-01', N'UAC8', N'Broker8'),
+  (N'YZA567', N'Lob9', '2022-09-01', N'UAC9', N'Broker9'),
+  (N'BCD890', N'Lob10', '2022-10-01', N'UAC10', N'Broker10'),
+  (N'EFG123', N'Lob11', '2022-11-01', N'UAC11', N'Broker11'),
+  (N'HIJ456', N'Lob12', '2022-12-01', N'UAC12', N'Broker12');
+
+SELECT * FROM dbo.BobTableTest as A LEFT JOIN dbo.MasterTable B ON (A.GlLobCode = B.GlobCode AND A.IncurredMonth = B.IncurredMonth
+AND (A.PolicyNumber = B.PolicyNumber))
+
+
